@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CardChecker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card" id="app" v-bind:style="'background: ' + bgcl">
+
+        <!-- Здесь будет выводиться ЛОГОТИП БАНКА -->
+        <div class="bank">
+            <img v-bind:src="payBank">
+        </div>
+
+        <!-- Поле для ввода НОМЕРА КАРТЫ -->
+        <div class="number-container">
+            <input type="text" placeholder="Номер карты" v-model="numberCart" v-bind:class="((isCor == 'true') ? 'input-ok' : 'input-err')">
+            <div class="status" v-bind:class="((isCor == 'true') ? 'status-ok' : 'status-err')"></div>
+        </div>
+
+        <!-- Поле для ввода ИМЕНИ ДЕРЖАТЕЛЯ -->
+        <div class="name-container">
+            <input type="text" placeholder="Имя держателя" v-bind:class="((isCorName == 'true') ? 'input-ok' : 'input-err')" v-model="name">
+            <div class="status" v-bind:class="((isCorName == 'true') ? 'status-ok' : 'status-err')"></div>
+        </div>
+
+        <!-- Логотип ПЛАТЕЖНОЙ СИСТЕМЫ -->
+        <div class="pay-system">
+            <img v-bind:src="paySys">
+        </div>
+
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            numberCart: '',
+            name: '',
+            bgcl: '#eff5f8'
+        },
+        computed: {
+            paySys(){
+                let firstNum = this.numberCart[0];
+                switch(firstNum) {
+                    case '2':
+                        return 'img/systems/mir.png';
+                    case '3':
+                        return 'img/systems/american-exp.png';
+                    case '4':
+                        return 'img/systems/visa.png';
+                    case '5':
+                        return 'img/systems/mastercard.png';
+                    case '6':
+                        return 'img/systems/maestro.png';
+                }
+            },
+            isCor() {
+                let sum1 = 0;
+                let sum2 = 0;
+                let res1 = 0;
+                if (this.numberCart.length == 16) {
+                    for (let i = 16; i < this.numberCart.length; i--) {
+                        if (i % 2 == 0) {
+                            res1 = this.numberCart[i] * 2;
+                            if (res1 > 9) {
+                                res1 = res1 - 9
+                            };
+                            sum1 += res1
+                        }
+                        else {
+                            sum2 += this.numberCart[i];
+                        }
+                    }
+                    if ((sum1 + sum2) % 10 == 0) {
+                        return 'true'
+                    } else return 'false'
+                } else return "false";
+            },
+            payBank() {
+                let bank = this.numberCart.slice(0,6);
+                if ((bank == "521178") || (bank == "548673") || (bank == "548601") || (bank == "415428") || (bank == "676371") || (bank == "477964") || (bank == "479004")){
+                    this.bgcl = '#EFDCDC';
+                    return 'img/banks/alpha.png';
+                };
+                if ((bank == "427229") || (bank == "527883") || (bank == "447520")){
+                    this.bgcl = '#90D9FD';
+                    return 'img/banks/vtb.png'
+                };
+                if ((bank == "548999") || (bank == "526483")){
+                    this.bgcl = '#557ACE';
+                    return 'img/banks/gazprombank.png'
+                };
+                if ((bank == "533736") || (bank == "540616")){
+                    this.bgcl = '#760416';
+                    return 'img/banks/mts-bank.png'
+                };
+                if ((bank == "434146") || (bank == "405870") || (bank == "544573") || (bank == "532301")){
+                    this.bgcl = '#9BE8E8';
+                    return 'img/banks/otkrytie.png'
+                };
+                if ((bank == "440503") || (bank == "554761")){
+                    this.bgcl = '#FAB085';
+                    return 'img/banks/rosbank.png'
+                };
+                if ((bank == "513691") || (bank == "510047")){
+                    this.bgcl = '#E6CEC1';
+                    return 'img/banks/russian_standart.png'
+                };
+                if ((bank == "462730") || (bank == "462729")){
+                    this.bgcl = '#FCF788';
+                    return 'img/banks/raiffaizen.png'
+                };
+                if ((bank == "521324") || (bank == "437773")){
+                    this.bgcl = '#FFBD14';
+                    return 'img/banks/tinkoff.png'
+                };
+                if ((bank == "427683") || (bank == "427901") || (bank == "427644") || (bank == "427601") || (bank == "427901") || (bank == "427631") || (bank == "427638") || (bank == "546938")){
+                    this.bgcl = '#ADFFA3';
+                    return 'img/banks/sberbank.png'
+                } else this.bgcl = '#eff5f8';
+            },
+            isCorName(){
+                let count = 0;
+                let alf = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+                for (let i = 0; i < this.name.length; i++) {
+                    for (let j = 0; j < alf.length; j++) {
+                        if (alf[j] == this.name[i]) {
+                            count++;
+                        }
+                    }
+                }
+                if ((count == this.name.length) && (this.name.length != 0)) {
+                    return 'true'
+                } else return 'false';
+            }
+        }
+    })
+</script>
+</body>
+</html>
